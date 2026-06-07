@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>දීමන්තගේ බහු-දෝෂ විශ්ලේෂණය - Interactive</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+/* ─── FOUNDATION & TOKENS ─── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:         #03060c;
+  --bg-card:    rgba(10, 18, 32, 0.65);
+  --bg-pill:    rgba(17, 29, 47, 0.8);
+  --border:     rgba(255,255,255,0.08);
+  --border-md:  rgba(255,255,255,0.15);
+  --border-hi:  rgba(255,255,255,0.3);
+  --text-1:     #f8fafc;
+  --text-2:     #94a3b8;
+  --text-3:     #475569;
+
+  --c-saturn:   #38bdf8;
+  --c-rahu:     #c084fc;
+  --c-kuja:     #fb923c;
+  --c-all:      #f8fafc;
+
+  --sat-dim:    rgba(56,189,248,0.15);
+  --rahu-dim:   rgba(192,132,252,0.15);
+  --kuja-dim:   rgba(251,146,60,0.15);
+  --sat-line:   rgba(56,189,248,0.4);
+  --rahu-line:  rgba(192,132,252,0.4);
+  --kuja-line:  rgba(251,146,60,0.4);
+
+  --r-sm: 10px;
+  --r-md: 16px;
+  --r-lg: 24px;
+  --r-xl: 32px;
+
+  --font-si: 'Noto Sans Sinhala', system-ui, -apple-system, sans-serif;
+  --font-d:  'Playfair Display', Georgia, serif;
+  --ease:    cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  background-image:
+    radial-gradient(ellipse 100% 45% at 50% -5%,  rgba(56,189,248,0.08) 0%, transparent 65%),
+    radial-gradient(ellipse 55%  40% at 88%  88%, rgba(192,132,252,0.05) 0%, transparent 60%),
+    radial-gradient(ellipse 45%  35% at 12%  75%, rgba(251,146,60,0.04)  0%, transparent 55%);
+  color: var(--text-1);
+  font-family: var(--font-si);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  letter-spacing: 0.01em;
+}
+
+/* ─── PAGE WRAP ─── */
+.page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 32px 16px 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ─── HEADER ─── */
+.hdr {
+  text-align: center;
+  padding: 32px 12px 24px;
+  position: relative;
+  animation: riseIn .8s var(--ease) both;
+}
+.eyebrow-row {
+  display: flex; align-items: center; justify-content: center;
+  gap: 12px; margin-bottom: 20px; flex-wrap: wrap;
+}
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: system-ui, sans-serif;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase;
+  border-radius: 100px; padding: 6px 16px; border: 1px solid;
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+}
+.eyebrow.e-saturn { color: var(--c-saturn); background: var(--sat-dim);  border-color: var(--sat-line); box-shadow: 0 4px 12px rgba(56,189,248,0.1); }
+.eyebrow.e-rahu   { color: var(--c-rahu);   background: var(--rahu-dim); border-color: var(--rahu-line); box-shadow: 0 4px 12px rgba(192,132,252,0.1); }
+.eyebrow.e-kuja   { color: var(--c-kuja);   background: var(--kuja-dim); border-color: var(--kuja-line); box-shadow: 0 4px 12px rgba(251,146,60,0.1); }
+
+.live-pip {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--c-saturn);
+  animation: blink 2s ease-in-out infinite;
+}
+@keyframes blink {
+  0%,100% { opacity:1; box-shadow:0 0 12px rgba(56,189,248,0.8); }
+  50%      { opacity:.3; box-shadow:0 0 0px rgba(56,189,248,0); }
+}
+
+.hdr-title {
+  font-family: var(--font-d);
+  font-size: clamp(26px, 6vw, 42px);
+  font-weight: 500;
+  color: var(--text-1);
+  line-height: 1.25;
+  margin-bottom: 12px;
+}
+.hdr-sub {
+  font-size: 15px; color: var(--text-2); line-height: 1.6;
+  max-width: 580px; margin: 0 auto; font-weight: 400;
+}
+
+/* ─── GLASS CARDS ─── */
+.glass-panel {
+  background: var(--bg-card);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--border);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+}
+
+/* ─── METRIC TILES ─── */
+.metric-grid {
+  display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 16px;
+  animation: riseIn .6s var(--ease) .1s both;
+}
+@media(max-width:640px) { .metric-grid { grid-template-columns: 1fr; gap: 12px; } }
+
+.m-tile {
+  border-radius: var(--r-lg);
+  padding: 24px;
+  display: flex; flex-direction: column; gap: 14px;
+  transition: all .3s var(--ease);
+}
+.m-tile:hover { border-color: var(--border-md); transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.4); }
+
+.m-tile-top { display: flex; align-items: center; justify-content: space-between; }
+.m-icon {
+  width: 40px; height: 40px; border-radius: var(--r-sm);
+  display: flex; align-items: center; justify-content: center; font-size: 18px;
+}
+.m-badge {
+  font-family: system-ui, sans-serif; font-size: 11px; font-weight: 700;
+  padding: 6px 12px; border-radius: 100px; border: 1px solid; letter-spacing: 0.05em;
+}
+.m-val { font-family: var(--font-d); font-size: 32px; color: var(--text-1); line-height: 1; }
+.m-label { font-size: 13px; font-weight: 500; color: var(--text-2); line-height: 1.5; }
+.m-bar { height: 4px; border-radius: 4px; background: rgba(255,255,255,0.05); overflow: hidden; }
+.m-bar-fill { height: 100%; border-radius: 4px; transition: width 1s var(--ease); }
+
+.tile-saturn .m-icon  { background: var(--sat-dim);  color: var(--c-saturn); }
+.tile-saturn .m-badge { background: var(--sat-dim);  color: var(--c-saturn); border-color: var(--sat-line); }
+.tile-saturn .m-bar-fill { background: var(--c-saturn); width: 80%; box-shadow: 0 0 8px var(--c-saturn); }
+
+.tile-rahu .m-icon  { background: var(--rahu-dim); color: var(--c-rahu); }
+.tile-rahu .m-badge { background: var(--rahu-dim); color: var(--c-rahu); border-color: var(--rahu-line); }
+.tile-rahu .m-bar-fill { background: var(--c-rahu); width: 50%; box-shadow: 0 0 8px var(--c-rahu); }
+
+.tile-kuja .m-icon  { background: var(--kuja-dim); color: var(--c-kuja); }
+.tile-kuja .m-badge { background: var(--kuja-dim); color: var(--c-kuja); border-color: var(--kuja-line); }
+.tile-kuja .m-bar-fill { background: var(--c-kuja); width: 20%; box-shadow: 0 0 8px var(--c-kuja); }
+
+/* ─── CHART CARD ─── */
+.chart-card { border-radius: var(--r-xl); overflow: hidden; animation: riseIn .6s var(--ease) .2s both; }
+.chart-card-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 24px 24px 16px; flex-wrap: wrap; gap: 16px;
+}
+.chart-title-row { display: flex; align-items: center; gap: 14px; }
+.chart-title-icon {
+  width: 44px; height: 44px; border-radius: var(--r-sm); background: var(--sat-dim);
+  display: flex; align-items: center; justify-content: center; font-size: 18px; color: var(--c-saturn);
+}
+.chart-title { font-size: 16px; font-weight: 600; color: var(--text-1); }
+.chart-subtitle { font-family: system-ui, sans-serif; font-size: 12px; color: var(--text-3); font-weight: 500; margin-top: 4px; }
+
+/* ─── CONTROLS ─── */
+.controls-wrap {
+  padding: 20px 24px; display: flex; flex-direction: column; gap: 20px;
+  background: rgba(0,0,0,0.25); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+}
+@media(min-width: 768px) { .controls-wrap { flex-direction: row; justify-content: space-between; align-items: center; } }
+
+.ctrl-row { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.ctrl-lbl {
+  font-family: system-ui, sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--text-3); display: flex; align-items: center; gap: 8px;
+}
+.pills {
+  display: flex; gap: 10px; flex-wrap: nowrap; overflow-x: auto;
+  padding-bottom: 4px; scrollbar-width: none; -ms-overflow-style: none; scroll-snap-type: x mandatory;
+}
+.pills::-webkit-scrollbar { display: none; }
+
+.pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-si); font-size: 14px; font-weight: 600;
+  padding: 10px 20px; border-radius: 100px; border: 1px solid var(--border);
+  background: var(--bg-pill); color: var(--text-2); cursor: pointer;
+  white-space: nowrap; transition: all .25s var(--ease); scroll-snap-align: start;
+}
+.pill:hover, .pill:focus-visible { border-color: var(--text-1); color: var(--text-1); outline: none; }
+.pill:active { transform: scale(.96); }
+
+.pill.active-all    { background: rgba(255,255,255,0.1); border-color: var(--c-all); color: var(--c-all); box-shadow: 0 0 12px rgba(255,255,255,0.1); }
+.pill.active-saturn { background: var(--sat-dim);  border-color: var(--sat-line);  color: var(--c-saturn); box-shadow: 0 0 12px rgba(56,189,248,0.2); }
+.pill.active-rahu   { background: var(--rahu-dim); border-color: var(--rahu-line); color: var(--c-rahu); box-shadow: 0 0 12px rgba(192,132,252,0.2); }
+.pill.active-kuja   { background: var(--kuja-dim); border-color: var(--kuja-line); color: var(--c-kuja); box-shadow: 0 0 12px rgba(251,146,60,0.2); }
+.pill.active-time   { background: rgba(255,255,255,0.12); border-color: var(--text-1); color: var(--text-1); }
+
+/* ─── CHART BODY ─── */
+.chart-body { padding: 24px 24px 0; }
+.chart-wrap { position: relative; width: 100%; height: 340px; }
+@media(min-width:640px) { .chart-wrap { height: 420px; } }
+
+/* ─── MULTI LEGEND ─── */
+.multi-legend {
+  display: none; justify-content: center; gap: 12px 24px; flex-wrap: wrap; padding: 20px 24px 28px;
+}
+.multi-legend.visible { display: flex; animation: riseIn .4s var(--ease); }
+.ml-item { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; color: var(--text-2); }
+.ml-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; box-shadow: 0 0 8px currentColor; }
+.ml-dash { width: 16px; height: 3px; border-radius: 3px; flex-shrink: 0; }
+.single-pad { padding-bottom: 24px; }
+
+/* ─── PHASE BAND ─── */
+.phase-band { display: flex; border-top: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; }
+.phase-band::-webkit-scrollbar { display: none; }
+.p-seg {
+  flex: 1; min-width: 100px; padding: 14px 8px;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  font-size: 11px; font-weight: 600; text-align: center;
+  border-right: 1px solid var(--border); transition: background .3s; cursor: default;
+}
+.p-seg:last-child { border-right: none; }
+.p-seg:hover { background: rgba(255,255,255,0.05); }
+.p-pip { width: 8px; height: 8px; border-radius: 50%; box-shadow: 0 0 8px currentColor; }
+.p-yr  { font-family: system-ui, sans-serif; font-size: 10px; color: var(--text-3); }
+
+/* ─── TIMELINE CARD ─── */
+.tl-card { border-radius: var(--r-xl); overflow: hidden; animation: riseIn .6s var(--ease) .3s both; }
+.tl-head {
+  padding: 24px 24px 16px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+}
+.tl-head-title { display: flex; align-items: center; gap: 12px; }
+.tl-head-title i { color: var(--text-3); font-size: 16px; }
+.tl-title-text { font-size: 16px; font-weight: 600; color: var(--text-1); }
+.tl-dosha-tabs { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
+.tl-dosha-tabs::-webkit-scrollbar { display: none; }
+
+.tl-tab {
+  font-size: 12px; font-weight: 600; padding: 8px 16px; border-radius: 100px;
+  border: 1px solid var(--border); background: transparent; color: var(--text-3);
+  cursor: pointer; font-family: var(--font-si); transition: all .25s; white-space: nowrap;
+}
+.tl-tab:hover { border-color: var(--border-hi); color: var(--text-1); }
+.tl-tab.tl-active-saturn { background: var(--sat-dim);  border-color: var(--sat-line);  color: var(--c-saturn); box-shadow: 0 0 12px rgba(56,189,248,0.1); }
+.tl-tab.tl-active-rahu   { background: var(--rahu-dim); border-color: var(--rahu-line); color: var(--c-rahu); box-shadow: 0 0 12px rgba(192,132,252,0.1); }
+.tl-tab.tl-active-kuja   { background: var(--kuja-dim); border-color: var(--kuja-line); color: var(--c-kuja); box-shadow: 0 0 12px rgba(251,146,60,0.1); }
+
+.tl-body { padding: 0 24px 24px; }
+.tl-list { display: flex; flex-direction: column; }
+
+.tl-item {
+  display: flex; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--border);
+  animation: riseIn .4s var(--ease) both; transition: transform .2s var(--ease), background .2s;
+  border-radius: var(--r-md); margin: 0 -12px; padding-left: 12px; padding-right: 12px;
+}
+.tl-item:last-child { border-bottom: none; }
+.tl-item:hover { background: rgba(255,255,255,0.03); transform: translateX(6px); }
+
+.tl-left { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; width: 36px; gap: 8px; }
+.tl-icon {
+  width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 14px; flex-shrink: 0; border: 1px solid; 
+  /* Box shadow applied dynamically in JS now */
+}
+.tl-line { flex:1; width:2px; min-height:16px; background: var(--border); border-radius: 2px; }
+
+.tl-content { flex:1; min-width:0; padding-top: 4px; }
+.tl-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 6px; }
+.tl-date { font-size: 15px; font-weight: 600; color: var(--text-1); line-height: 1.4; }
+.tl-lv {
+  font-family: system-ui, sans-serif; font-size: 11px; font-weight: 700;
+  padding: 4px 10px; border-radius: 100px; border: 1px solid; flex-shrink: 0; white-space: nowrap;
+}
+.tl-desc { font-size: 13.5px; color: var(--text-2); line-height: 1.6; }
+
+/* ─── FOOTER ─── */
+.footer {
+  text-align: center; font-size: 13px; font-weight: 500; color: var(--text-3);
+  display: flex; align-items: center; justify-content: center; gap: 12px; padding-top: 16px;
+}
+
+/* ─── ANIMATION ─── */
+@keyframes riseIn {
+  from { opacity:0; transform:translateY(20px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- ── HEADER ── -->
+  <header class="hdr">
+    <div class="eyebrow-row">
+      <div class="live-pip"></div>
+      <span class="eyebrow e-saturn"><i class="fa-solid fa-ring"></i>ශනි</span>
+      <span class="eyebrow e-rahu"><i class="fa-solid fa-eclipse"></i>රාහු-කේතු</span>
+      <span class="eyebrow e-kuja"><i class="fa-solid fa-fire-flame-curved"></i>කුජ</span>
+    </div>
+    <h1 class="hdr-title">දීමන්තගේ බහු-දෝෂ<br>පීඩන විශ්ලේෂණය</h1>
+    <p class="hdr-sub">ශනි ඒරාෂ්ටකය, රාහු-කේතු සහ කුජ දෝෂයන්හි කාලරේඛා සංසන්දනය (2026–2028)</p>
+  </header>
+
+  <!-- ── METRIC TILES ── -->
+  <div class="metric-grid">
+    <div class="m-tile glass-panel tile-saturn">
+      <div class="m-tile-top">
+        <div class="m-icon"><i class="fa-solid fa-ring"></i></div>
+        <span class="m-badge"><i class="fa-solid fa-arrow-trend-down fa-xs"></i> ජූනි 2027</span>
+      </div>
+      <div class="m-val">9.5/10</div>
+      <div class="m-label">ශනි ඒරාෂ්ටක – ඔක් 2026 උපරිම</div>
+      <div class="m-bar"><div class="m-bar-fill"></div></div>
+    </div>
+    <div class="m-tile glass-panel tile-rahu">
+      <div class="m-tile-top">
+        <div class="m-icon"><i class="fa-solid fa-eclipse"></i></div>
+        <span class="m-badge"><i class="fa-solid fa-bolt fa-xs"></i> නොවැ 2027</span>
+      </div>
+      <div class="m-val">9.0/10</div>
+      <div class="m-label">රාහු-කේතු – නොවැ 2027 අර්බුදය</div>
+      <div class="m-bar"><div class="m-bar-fill"></div></div>
+    </div>
+    <div class="m-tile glass-panel tile-kuja">
+      <div class="m-tile-top">
+        <div class="m-icon"><i class="fa-solid fa-fire-flame-curved"></i></div>
+        <span class="m-badge"><i class="fa-solid fa-check fa-xs"></i> සාමාන්‍ය</span>
+      </div>
+      <div class="m-val">5.5/10</div>
+      <div class="m-label">කුජ – ජනවාරි 2027 ක්ෂණික ස්පයික්</div>
+      <div class="m-bar"><div class="m-bar-fill"></div></div>
+    </div>
+  </div>
+
+  <!-- ── CHART CARD ── -->
+  <div class="chart-card glass-panel">
+    <div class="chart-card-head">
+      <div class="chart-title-row">
+        <div class="chart-title-icon"><i class="fa-solid fa-chart-line"></i></div>
+        <div>
+          <div class="chart-title">දෝෂ පීඩන ප්‍රස්තාරය</div>
+          <div class="chart-subtitle">ජූනි 2026 – අප්‍රේල් 2028 · 0–10 척도</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls-wrap">
+      <div class="ctrl-row">
+        <div class="ctrl-lbl"><i class="fa-solid fa-layer-group"></i>දෝෂය</div>
+        <div class="pills" id="dosha-pills">
+          <button class="pill active-all" data-type="all" onclick="setDosha('all')">
+            <i class="fa-solid fa-chart-pie"></i>සියලු
+          </button>
+          <button class="pill" data-type="saturn" onclick="setDosha('saturn')">
+            <i class="fa-solid fa-ring"></i>ශනි
+          </button>
+          <button class="pill" data-type="rahu" onclick="setDosha('rahu')">
+            <i class="fa-solid fa-eclipse"></i>රාහු-කේතු
+          </button>
+          <button class="pill" data-type="kuja" onclick="setDosha('kuja')">
+            <i class="fa-solid fa-fire-flame-curved"></i>කුජ
+          </button>
+        </div>
+      </div>
+      <div class="ctrl-row">
+        <div class="ctrl-lbl"><i class="fa-regular fa-calendar"></i>කාලය</div>
+        <div class="pills" id="time-pills">
+          <button class="pill time-btn" data-time="week" onclick="setTime('week')">
+            <i class="fa-regular fa-calendar-week"></i>සතිය
+          </button>
+          <button class="pill time-btn" data-time="month" onclick="setTime('month')">
+            <i class="fa-regular fa-calendar"></i>මාසිකව
+          </button>
+          <button class="pill time-btn active-time" data-time="3month" onclick="setTime('3month')">
+            <i class="fa-regular fa-calendar-days"></i>මාස 3
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chart -->
+    <div class="chart-body">
+      <div class="chart-wrap">
+        <canvas id="doshaChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Multi-legend -->
+    <div class="multi-legend" id="multiLegend">
+      <div class="ml-item">
+        <div class="ml-dot" style="color:var(--c-saturn); background:var(--c-saturn);"></div>
+        <div class="ml-dash" style="background:var(--c-saturn);"></div>
+        ශනි ඒරාෂ්ටක
+      </div>
+      <div class="ml-item">
+        <div class="ml-dot" style="color:var(--c-rahu); background:var(--c-rahu);"></div>
+        <div class="ml-dash" style="background:var(--c-rahu);"></div>
+        රාහු-කේතු අර්බුදය
+      </div>
+      <div class="ml-item">
+        <div class="ml-dot" style="color:var(--c-kuja); background:var(--c-kuja);"></div>
+        <div class="ml-dash" style="background:var(--c-kuja);"></div>
+        කුජ බලපෑම
+      </div>
+    </div>
+    <div class="single-pad" id="singlePad" style="display:none;"></div>
+
+    <!-- Phase band -->
+    <div class="phase-band">
+      <div class="p-seg" style="background:rgba(56,189,248,0.06);color:var(--c-saturn);">
+        <div class="p-pip" style="color:var(--c-saturn); background:var(--c-saturn);"></div>
+        <span>ශනි උපරිම</span>
+        <span class="p-yr">2026</span>
+      </div>
+      <div class="p-seg" style="background:rgba(251,191,36,0.06);color:#fbbf24;">
+        <div class="p-pip" style="color:#fbbf24; background:#fbbf24;"></div>
+        <span>ශනි හැරවුම</span>
+        <span class="p-yr">ජූනි 2027</span>
+      </div>
+      <div class="p-seg" style="background:rgba(192,132,252,0.06);color:var(--c-rahu);">
+        <div class="p-pip" style="color:var(--c-rahu); background:var(--c-rahu);"></div>
+        <span>රාහු අර්බුදය</span>
+        <span class="p-yr">නොවැ 2027</span>
+      </div>
+      <div class="p-seg" style="background:rgba(74,222,128,0.06);color:#4ade80;">
+        <div class="p-pip" style="color:#4ade80; background:#4ade80;"></div>
+        <span>සම්පූර්ණ සුවය</span>
+        <span class="p-yr">2028</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── TIMELINE CARD ── -->
+  <div class="tl-card glass-panel">
+    <div class="tl-head">
+      <div class="tl-head-title">
+        <i class="fa-solid fa-timeline"></i>
+        <span class="tl-title-text">ජ්‍යෝතිෂ කාල සටහන</span>
+      </div>
+      <div class="tl-dosha-tabs">
+        <button class="tl-tab tl-active-saturn" data-tl="saturn" onclick="setTlDosha('saturn')">ශනි ඒරාෂ්ටක</button>
+        <button class="tl-tab" data-tl="rahu"   onclick="setTlDosha('rahu')">රාහු-කේතු</button>
+        <button class="tl-tab" data-tl="kuja"   onclick="setTlDosha('kuja')">කුජ දෝෂ</button>
+      </div>
+    </div>
+    <div class="tl-body">
+      <div class="tl-list" id="tlList" role="list"></div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <i class="fa-solid fa-om" style="color:var(--c-saturn);"></i>
+    <span>ආධ්‍යාත්මික විශ්ලේෂණය · දීමන්තගේ ජ්‍යෝතිෂ්‍ය කාලරේඛාව 2026–2028</span>
+    <i class="fa-solid fa-om" style="color:var(--c-rahu);"></i>
+  </footer>
+
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════
+   ORIGINAL DATA — STRICTLY UNTOUCHED
+═══════════════════════════════════════════════════════ */
+const saturnMilestones = [
+  { date: new Date(2026, 5, 7),  val: 8.0,  desc: "ඒරාෂ්ටක සහ 6 වැන්නේ පීඩනය" },
+  { date: new Date(2026, 8, 15), val: 9.5,  desc: "සෙනසුරු වක්‍ර වීම: මානසික පීඩන උපරිමය" },
+  { date: new Date(2026, 11, 31),val: 8.5,  desc: "වසර අග: බාධක පවතී" },
+  { date: new Date(2027, 2, 15), val: 7.5,  desc: "කර්ම පිරිසිදු කිරීමේ අවසන් අදියර" },
+  { date: new Date(2027, 5, 2),  val: 7.0,  desc: "මහා නිදහස් වීමට පෙර දිනය" },
+  { date: new Date(2027, 5, 3),  val: 2.0,  desc: "මහා නිදහස් වීම: සෙනසුරු මාරුව!" },
+  { date: new Date(2027, 9, 20), val: 3.5,  desc: "අවසාන පරීක්ෂාව (කෙටි පසුගමන)" },
+  { date: new Date(2028, 1, 23), val: 1.0,  desc: "පූර්ණ සහ සදාකාලික නිදහස!" },
+  { date: new Date(2028, 3, 1),  val: 0.5,  desc: "ස්වර්ණමය යුගයේ ස්ථාවර වර්ධනය" }
+];
+const rahuKetuMilestones = [
+  { date: new Date(2026, 5, 7),  val: 5.0,  desc: "මධ්‍යස්ථ මානසික අවිනිශ්චිතතාව" },
+  { date: new Date(2027, 1, 15), val: 5.5,  desc: "සුළු ව්‍යාකූලතා" },
+  { date: new Date(2027, 3, 15), val: 6.0,  desc: "වෘත්තීය/ගෘහස්ථ ආතතියේ ආරම්භය" },
+  { date: new Date(2027, 8, 15), val: 7.5,  desc: "රාහු-කේතු සංක්‍රාන්ති පීඩනය තීව්‍ර වීම" },
+  { date: new Date(2027, 10, 15),val: 9.0,  desc: "දැවැන්ත අර්බුදය: කේතු 10 වැන්නේ බලපෑම" },
+  { date: new Date(2027, 11, 20),val: 8.5,  desc: "අර්බුදයෙන් පාඩම් ඉගෙනීම" },
+  { date: new Date(2028, 1, 15), val: 4.0,  desc: "මානසික අවුල් සහගත බව පහව යාම" },
+  { date: new Date(2028, 3, 1),  val: 2.0,  desc: "රාහු-කේතු ශක්තිය ස්ථාවර වීම" }
+];
+const kujaMilestones = [
+  { date: new Date(2026, 5, 7),  val: 2.0,  desc: "සාමාන්‍ය කුජ බලය (ධන යෝගය)" },
+  { date: new Date(2026, 11, 1), val: 2.5,  desc: "සාමාන්‍ය තත්ත්වය" },
+  { date: new Date(2027, 0, 20), val: 5.5,  desc: "හදිසි කෝපය සහ පවුලේ සුළු ගැටුම්" },
+  { date: new Date(2027, 1, 25), val: 2.0,  desc: "ගැටුම් සමනය වීම" },
+  { date: new Date(2027, 6, 10), val: 2.5,  desc: "ව්‍යාපාරික ජවය ඉහළ යාම" },
+  { date: new Date(2027, 7, 15), val: 4.5,  desc: "අධි ක්‍රියාකාරීත්වය නිසා සුළු වෙහෙස" },
+  { date: new Date(2028, 3, 1),  val: 1.5,  desc: "පූර්ණ පාලනය සහ ධන වර්ධනය" }
+];
+
+/* ── HELPERS ── */
+const monthsSi = ["ජනවාරි","පෙබරවාරි","මාර්තු","අප්‍රේල්","මැයි","ජූනි","ජූලි","අගෝස්තු","සැප්තැම්බර්","ඔක්තෝබර්","නොවැම්බර්","දෙසැම්බර්"];
+function formatDateSi(d) {
+  return `${d.getFullYear()} ${monthsSi[d.getMonth()]} ${String(d.getDate()).padStart(2,'0')}`;
+}
+
+function generateDailyData(arr) {
+  let daily = [];
+  let start = new Date(2026, 5, 7);
+  let end   = new Date(2028, 3, 1);
+  for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+    let cur = new Date(d), t = cur.getTime();
+    let prev = arr[0], next = arr[arr.length-1], exact = null;
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i].date.getTime() === t) { exact = arr[i]; break; }
+      if (arr[i].date.getTime() <= t) prev = arr[i];
+      if (arr[i].date.getTime() >= t && next.date.getTime() === arr[arr.length-1].date.getTime()) next = arr[i];
+    }
+    let val = 0, desc = '';
+    if (exact) { val = exact.val; desc = exact.desc; }
+    else {
+      let td = next.date.getTime() - prev.date.getTime();
+      val = td === 0 ? prev.val : prev.val + (next.val - prev.val) * ((t - prev.date.getTime()) / td);
+    }
+    daily.push({ dateObj: cur, label: formatDateSi(cur), val: parseFloat(val.toFixed(2)), desc, isKey: !!exact });
+  }
+  return daily;
+}
+
+const allData = {
+  saturn: generateDailyData(saturnMilestones),
+  rahu:   generateDailyData(rahuKetuMilestones),
+  kuja:   generateDailyData(kujaMilestones)
+};
+
+function getFiltered(arr, mode) {
+  let filtered = [];
+  arr.forEach(item => {
+    let d = item.dateObj;
+    if (item.isKey) { filtered.push(item); return; }
+    if (mode === 'week')   { if (d.getDay() === 1) filtered.push(item); }
+    else if (mode === 'month')  { if (d.getDate() === 1) filtered.push(item); }
+    else if (mode === '3month') {
+      if (d.getDate() === 1 && (d.getMonth() % 3 === 2 || d.getMonth() === 5 || d.getMonth() === 8 || d.getMonth() === 11)) filtered.push(item);
+    }
+  });
+  let unique = [], last = 0;
+  filtered.sort((a,b) => a.dateObj - b.dateObj).forEach(item => {
+    if (item.dateObj.getTime() !== last) { unique.push(item); last = item.dateObj.getTime(); }
+  });
+  return unique;
+}
+
+/* ── CONFIG ── */
+const cfg = {
+  saturn: { label:'ශනි ඒරාෂ්ටක',   color:'#38bdf8', bg:'rgba(56,189,248,0.15)'  },
+  rahu:   { label:'රාහු-කේතු',      color:'#c084fc', bg:'rgba(192,132,252,0.15)' },
+  kuja:   { label:'කුජ',             color:'#fb923c', bg:'rgba(251,146,60,0.15)'  }
+};
+
+/* ── STATE ── */
+let curDosha = 'all', curTime = '3month', currentTlDosha = 'saturn';
+let chart;
+const canvasEl = document.getElementById('doshaChart');
+const chartCtx = canvasEl.getContext('2d');
+
+/* ── CHART RENDER ── */
+function renderChart() {
+  if (chart) chart.destroy();
+
+  const ml = document.getElementById('multiLegend');
+  const sp = document.getElementById('singlePad');
+  let datasets = [], baseLabels = [];
+
+  if (curDosha === 'all') {
+    ml.classList.add('visible'); sp.style.display = 'none';
+    ['saturn','rahu','kuja'].forEach((key, ki) => {
+      const fd = getFiltered(allData[key], curTime);
+      if (ki === 0) baseLabels = fd.map(d => d.label);
+      datasets.push({
+        label: cfg[key].label,
+        data: fd.map(d => d.val),
+        borderColor: cfg[key].color,
+        backgroundColor: 'transparent',
+        borderWidth: 3,
+        pointBackgroundColor: fd.map(d => d.isKey ? '#fff' : cfg[key].color),
+        pointBorderColor: '#0a1220',
+        pointBorderWidth: 2,
+        pointRadius: fd.map(d => d.isKey ? 6 : (fd.length > 100 ? 1.5 : 3)),
+        pointHoverRadius: 9,
+        tension: 0.4,
+        fill: false,
+        descriptions: fd.map(d => d.desc)
+      });
+    });
+  } else {
+    ml.classList.remove('visible'); sp.style.display = 'block';
+    const fd = getFiltered(allData[curDosha], curTime);
+    baseLabels = fd.map(d => d.label);
+    const fillG = chartCtx.createLinearGradient(0, 0, 0, 400);
+    fillG.addColorStop(0, cfg[curDosha].bg);
+    fillG.addColorStop(1, 'rgba(10, 18, 32, 0)');
+    datasets.push({
+      label: cfg[curDosha].label,
+      data: fd.map(d => d.val),
+      borderColor: cfg[curDosha].color,
+      backgroundColor: fillG,
+      borderWidth: 4,
+      pointBackgroundColor: fd.map(d => d.isKey ? '#fff' : cfg[curDosha].color),
+      pointBorderColor: '#0a1220',
+      pointBorderWidth: 2,
+      pointRadius: fd.map(d => d.isKey ? 7 : (fd.length > 100 ? 1.5 : 4)),
+      pointHoverRadius: 10,
+      tension: 0.4,
+      fill: true,
+      descriptions: fd.map(d => d.desc)
+    });
+  }
+
+  chart = new Chart(chartCtx, {
+    type: 'line',
+    data: { labels: baseLabels, datasets },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: 700, easing: 'easeOutQuart' },
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: 'rgba(15, 23, 42, 0.95)',
+          titleColor: '#f1f5ff',
+          bodyColor: '#cbd5e1',
+          borderColor: 'rgba(255,255,255,0.15)',
+          borderWidth: 1,
+          padding: 16,
+          cornerRadius: 12,
+          usePointStyle: true,
+          boxPadding: 8,
+          titleFont: { size: 14, weight:'600', family:"'Noto Sans Sinhala',sans-serif" },
+          bodyFont:  { size: 13, family:"'Noto Sans Sinhala',sans-serif" },
+          callbacks: {
+            title: c => c[0].label,
+            label: c => {
+              const desc = c.dataset.descriptions ? c.dataset.descriptions[c.dataIndex] : '';
+              return '  ' + c.dataset.label + ': ' + c.parsed.y.toFixed(1) + '/10' + (desc ? ' · ' + desc : '');
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: 'rgba(255,255,255,0.04)', drawBorder: false },
+          border: { display: false },
+          ticks: {
+            color: '#64748b',
+            font: { size: 12, family:"'Noto Sans Sinhala',sans-serif" },
+            maxRotation: 45, minRotation: 30,
+            autoSkip: true, maxTicksLimit: 11
+          }
+        },
+        y: {
+          min: 0, max: 10,
+          grid: { color: 'rgba(255,255,255,0.06)', drawBorder: false },
+          border: { display: false },
+          ticks: {
+            color: '#64748b',
+            font: { size: 12 },
+            stepSize: 2,
+            callback: v => v + '/10'
+          }
+        }
+      }
+    }
+  });
+}
+
+/* ── CONTROLS ── */
+function setDosha(type) {
+  curDosha = type;
+  document.querySelectorAll('#dosha-pills .pill').forEach(p => {
+    p.className = 'pill';
+    if (p.dataset.type === type) p.classList.add('active-' + type);
+  });
+  renderChart();
+}
+function setTime(t) {
+  curTime = t;
+  document.querySelectorAll('#time-pills .pill').forEach(p => {
+    p.classList.remove('active-time');
+    if (p.dataset.time === t) p.classList.add('active-time');
+  });
+  renderChart();
+}
+
+/* ── SEMANTIC TIMELINE (DANGER TO SAFE) ── */
+const tlMilestones = { saturn: saturnMilestones, rahu: rahuKetuMilestones, kuja: kujaMilestones };
+const tlIconMap = {
+  saturn: ['fa-solid fa-circle-dot','fa-solid fa-arrow-trend-up','fa-solid fa-triangle-exclamation','fa-solid fa-broom','fa-regular fa-clock','fa-solid fa-wand-magic-sparkles','fa-solid fa-rotate-left','fa-solid fa-dove','fa-solid fa-star'],
+  rahu:   ['fa-solid fa-circle-dot','fa-solid fa-question','fa-solid fa-house-crack','fa-solid fa-bolt','fa-solid fa-explosion','fa-solid fa-book-open','fa-solid fa-cloud-sun','fa-solid fa-leaf'],
+  kuja:   ['fa-solid fa-circle-dot','fa-solid fa-equals','fa-solid fa-fire','fa-solid fa-wind','fa-solid fa-chart-line','fa-solid fa-dumbbell','fa-solid fa-coins']
+};
+
+function getSemanticStyle(v) {
+  let hex, r, g, b, glow;
+  if (v >= 8.5) { 
+    hex = '#ef4444'; r = 239; g = 68; b = 68;  // Danger (Red)
+    glow = `0 0 16px rgba(239,68,68,0.25)`;
+  } else if (v >= 6.5) { 
+    hex = '#f97316'; r = 249; g = 115; b = 22; // High (Orange)
+    glow = `0 0 14px rgba(249,115,22,0.2)`;
+  } else if (v >= 4.0) { 
+    hex = '#fbbf24'; r = 251; g = 191; b = 36; // Moderate (Amber)
+    glow = `0 0 10px rgba(251,191,36,0.15)`;
+  } else if (v >= 2.0) { 
+    hex = '#34d399'; r = 52; g = 211; b = 153; // Safe (Emerald)
+    glow = `0 4px 10px rgba(0,0,0,0.2)`;
+  } else { 
+    hex = '#38bdf8'; r = 56; g = 189; b = 248; // Peaceful (Sky Blue)
+    glow = `0 4px 10px rgba(0,0,0,0.2)`;
+  }
+
+  return {
+    color: hex,
+    bg: `rgba(${r},${g},${b},0.15)`,
+    border: `rgba(${r},${g},${b},0.4)`,
+    glow: glow
+  };
+}
+
+function buildTimeline(doshaKey) {
+  const list = document.getElementById('tlList');
+  list.innerHTML = '';
+  const milestones = tlMilestones[doshaKey];
+  const icons = tlIconMap[doshaKey];
+
+  milestones.forEach((m, i) => {
+    const isLast = i === milestones.length - 1;
+    const s = getSemanticStyle(m.val);
+    
+    const div = document.createElement('div');
+    div.className = 'tl-item';
+    div.setAttribute('role', 'listitem');
+    div.style.animationDelay = (i * 0.05) + 's';
+    div.innerHTML = `
+      <div class="tl-left">
+        <div class="tl-icon" style="border-color:${s.border}; background:${s.bg}; color:${s.color}; box-shadow:${s.glow};">
+          <i class="${icons[i] || 'fa-solid fa-circle-dot'}"></i>
+        </div>
+        ${!isLast ? '<div class="tl-line"></div>' : ''}
+      </div>
+      <div class="tl-content">
+        <div class="tl-row">
+          <div class="tl-date">${formatDateSi(m.date)}</div>
+          <span class="tl-lv" style="background:${s.bg}; color:${s.color}; border-color:${s.border}; box-shadow:${s.glow};">${m.val}/10</span>
+        </div>
+        <div class="tl-desc">${m.desc}</div>
+      </div>`;
+    list.appendChild(div);
+  });
+}
+
+function setTlDosha(key) {
+  currentTlDosha = key;
+  document.querySelectorAll('.tl-tab').forEach(t => {
+    t.className = 'tl-tab';
+    if (t.dataset.tl === key) t.classList.add('tl-active-' + key);
+  });
+  buildTimeline(key);
+}
+
+/* ── INIT ── */
+window.onload = () => {
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(() => {
+      renderChart();
+      buildTimeline('saturn');
+    });
+  } else {
+    setTimeout(() => {
+      renderChart();
+      buildTimeline('saturn');
+    }, 300);
+  }
+};
+</script>
+</body>
+</html>
