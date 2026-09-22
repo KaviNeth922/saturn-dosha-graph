@@ -27,14 +27,18 @@
   --c-saturn:   #38bdf8;
   --c-rahu:     #c084fc;
   --c-kuja:     #fb923c;
+  --c-good:     #10b981; /* New: Emerald Green for Good Deeds */
   --c-all:      #f8fafc;
 
   --sat-dim:    rgba(56,189,248,0.15);
   --rahu-dim:   rgba(192,132,252,0.15);
   --kuja-dim:   rgba(251,146,60,0.15);
+  --good-dim:   rgba(16,185,129,0.15); /* New */
+  
   --sat-line:   rgba(56,189,248,0.4);
   --rahu-line:  rgba(192,132,252,0.4);
   --kuja-line:  rgba(251,146,60,0.4);
+  --good-line:  rgba(16,185,129,0.4); /* New */
 
   --r-sm: 10px;
   --r-md: 16px;
@@ -64,7 +68,7 @@ body {
 
 /* ─── PAGE WRAP ─── */
 .page {
-  max-width: 900px;
+  max-width: 1000px;
   margin: 0 auto;
   padding: 32px 16px 80px;
   display: flex;
@@ -93,6 +97,7 @@ body {
 .eyebrow.e-saturn { color: var(--c-saturn); background: var(--sat-dim);  border-color: var(--sat-line); box-shadow: 0 4px 12px rgba(56,189,248,0.1); }
 .eyebrow.e-rahu   { color: var(--c-rahu);   background: var(--rahu-dim); border-color: var(--rahu-line); box-shadow: 0 4px 12px rgba(192,132,252,0.1); }
 .eyebrow.e-kuja   { color: var(--c-kuja);   background: var(--kuja-dim); border-color: var(--kuja-line); box-shadow: 0 4px 12px rgba(251,146,60,0.1); }
+.eyebrow.e-good   { color: var(--c-good);   background: var(--good-dim); border-color: var(--good-line); box-shadow: 0 4px 12px rgba(16,185,129,0.1); }
 
 .live-pip {
   width: 8px; height: 8px; border-radius: 50%;
@@ -114,7 +119,7 @@ body {
 }
 .hdr-sub {
   font-size: 15px; color: var(--text-2); line-height: 1.6;
-  max-width: 580px; margin: 0 auto; font-weight: 400;
+  max-width: 650px; margin: 0 auto; font-weight: 400;
 }
 
 /* ─── GLASS CARDS ─── */
@@ -128,10 +133,11 @@ body {
 
 /* ─── METRIC TILES ─── */
 .metric-grid {
-  display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 16px;
+  display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 16px;
   animation: riseIn .6s var(--ease) .1s both;
 }
-@media(max-width:640px) { .metric-grid { grid-template-columns: 1fr; gap: 12px; } }
+@media(max-width:850px) { .metric-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; } }
+@media(max-width:480px) { .metric-grid { grid-template-columns: 1fr; gap: 12px; } }
 
 .m-tile {
   border-radius: var(--r-lg);
@@ -166,6 +172,10 @@ body {
 .tile-kuja .m-icon  { background: var(--kuja-dim); color: var(--c-kuja); }
 .tile-kuja .m-badge { background: var(--kuja-dim); color: var(--c-kuja); border-color: var(--kuja-line); }
 .tile-kuja .m-bar-fill { background: var(--c-kuja); width: 20%; box-shadow: 0 0 8px var(--c-kuja); }
+
+.tile-good .m-icon  { background: var(--good-dim); color: var(--c-good); }
+.tile-good .m-badge { background: var(--good-dim); color: var(--c-good); border-color: var(--good-line); }
+.tile-good .m-bar-fill { background: var(--c-good); width: 96%; box-shadow: 0 0 8px var(--c-good); }
 
 /* ─── CHART CARD ─── */
 .chart-card { border-radius: var(--r-xl); overflow: hidden; animation: riseIn .6s var(--ease) .2s both; }
@@ -213,6 +223,7 @@ body {
 .pill.active-saturn { background: var(--sat-dim);  border-color: var(--sat-line);  color: var(--c-saturn); box-shadow: 0 0 12px rgba(56,189,248,0.2); }
 .pill.active-rahu   { background: var(--rahu-dim); border-color: var(--rahu-line); color: var(--c-rahu); box-shadow: 0 0 12px rgba(192,132,252,0.2); }
 .pill.active-kuja   { background: var(--kuja-dim); border-color: var(--kuja-line); color: var(--c-kuja); box-shadow: 0 0 12px rgba(251,146,60,0.2); }
+.pill.active-good   { background: var(--good-dim); border-color: var(--good-line); color: var(--c-good); box-shadow: 0 0 12px rgba(16,185,129,0.2); }
 .pill.active-time   { background: rgba(255,255,255,0.12); border-color: var(--text-1); color: var(--text-1); }
 
 /* ─── CHART BODY ─── */
@@ -264,6 +275,7 @@ body {
 .tl-tab.tl-active-saturn { background: var(--sat-dim);  border-color: var(--sat-line);  color: var(--c-saturn); box-shadow: 0 0 12px rgba(56,189,248,0.1); }
 .tl-tab.tl-active-rahu   { background: var(--rahu-dim); border-color: var(--rahu-line); color: var(--c-rahu); box-shadow: 0 0 12px rgba(192,132,252,0.1); }
 .tl-tab.tl-active-kuja   { background: var(--kuja-dim); border-color: var(--kuja-line); color: var(--c-kuja); box-shadow: 0 0 12px rgba(251,146,60,0.1); }
+.tl-tab.tl-active-good   { background: var(--good-dim); border-color: var(--good-line); color: var(--c-good); box-shadow: 0 0 12px rgba(16,185,129,0.1); }
 
 .tl-body { padding: 0 24px 24px; }
 .tl-list { display: flex; flex-direction: column; }
@@ -317,9 +329,10 @@ body {
       <span class="eyebrow e-saturn"><i class="fa-solid fa-ring"></i>ශනි</span>
       <span class="eyebrow e-rahu"><i class="fa-solid fa-eclipse"></i>රාහු-කේතු</span>
       <span class="eyebrow e-kuja"><i class="fa-solid fa-fire-flame-curved"></i>කුජ</span>
+      <span class="eyebrow e-good"><i class="fa-solid fa-seedling"></i>ධනාත්මක ශක්ති</span>
     </div>
-    <h1 class="hdr-title">දීමන්තගේ බහු-දෝෂ<br>පීඩන විශ්ලේෂණය</h1>
-    <p class="hdr-sub">ශනි ඒරාෂ්ටකය, රාහු-කේතු සහ කුජ දෝෂයන්හි කාලරේඛා සංසන්දනය (2026–2028)</p>
+    <h1 class="hdr-title">දීමන්තගේ බහු-දෝෂ<br>සහ ශක්ති විශ්ලේෂණය</h1>
+    <p class="hdr-sub">ශනි ඒරාෂ්ටකය, රාහු-කේතු සහ කුජ දෝෂයන් සමග කර්මජ ශක්ති පිබිදීමේ කාලරේඛාව (2026–2028)</p>
   </header>
 
   <!-- ── METRIC TILES ── -->
@@ -351,6 +364,16 @@ body {
       <div class="m-label">කුජ – ජනවාරි 2027 ක්ෂණික ස්පයික්</div>
       <div class="m-bar"><div class="m-bar-fill"></div></div>
     </div>
+    <!-- NEW TILE: Good Deeds / Positive Karma -->
+    <div class="m-tile glass-panel tile-good">
+      <div class="m-tile-top">
+        <div class="m-icon"><i class="fa-solid fa-seedling"></i></div>
+        <span class="m-badge"><i class="fa-solid fa-arrow-trend-up fa-xs"></i> 2027 ඔක්</span>
+      </div>
+      <div class="m-val">9.6/10</div>
+      <div class="m-label">ධර්මකර්මාධිපති යෝගය</div>
+      <div class="m-bar"><div class="m-bar-fill"></div></div>
+    </div>
   </div>
 
   <!-- ── CHART CARD ── -->
@@ -359,7 +382,7 @@ body {
       <div class="chart-title-row">
         <div class="chart-title-icon"><i class="fa-solid fa-chart-line"></i></div>
         <div>
-          <div class="chart-title">දෝෂ පීඩන ප්‍රස්තාරය</div>
+          <div class="chart-title">දෝෂ සහ ශක්ති පීඩන ප්‍රස්තාරය</div>
           <div class="chart-subtitle">ජූනි 2026 – අප්‍රේල් 2028 · 0–10 척도</div>
         </div>
       </div>
@@ -368,7 +391,7 @@ body {
     <!-- Controls -->
     <div class="controls-wrap">
       <div class="ctrl-row">
-        <div class="ctrl-lbl"><i class="fa-solid fa-layer-group"></i>දෝෂය</div>
+        <div class="ctrl-lbl"><i class="fa-solid fa-layer-group"></i>ප්‍රස්ථාර දත්ත</div>
         <div class="pills" id="dosha-pills">
           <button class="pill active-all" data-type="all" onclick="setDosha('all')">
             <i class="fa-solid fa-chart-pie"></i>සියලු
@@ -381,6 +404,9 @@ body {
           </button>
           <button class="pill" data-type="kuja" onclick="setDosha('kuja')">
             <i class="fa-solid fa-fire-flame-curved"></i>කුජ
+          </button>
+          <button class="pill" data-type="good" onclick="setDosha('good')">
+            <i class="fa-solid fa-seedling"></i>ධනාත්මක ශක්ති
           </button>
         </div>
       </div>
@@ -424,6 +450,11 @@ body {
         <div class="ml-dash" style="background:var(--c-kuja);"></div>
         කුජ බලපෑම
       </div>
+      <div class="ml-item">
+        <div class="ml-dot" style="color:var(--c-good); background:var(--c-good);"></div>
+        <div class="ml-dash" style="background:var(--c-good);"></div>
+        ධනාත්මක ශක්ති
+      </div>
     </div>
     <div class="single-pad" id="singlePad" style="display:none;"></div>
 
@@ -463,6 +494,7 @@ body {
         <button class="tl-tab tl-active-saturn" data-tl="saturn" onclick="setTlDosha('saturn')">ශනි ඒරාෂ්ටක</button>
         <button class="tl-tab" data-tl="rahu"   onclick="setTlDosha('rahu')">රාහු-කේතු</button>
         <button class="tl-tab" data-tl="kuja"   onclick="setTlDosha('kuja')">කුජ දෝෂ</button>
+        <button class="tl-tab" data-tl="good"   onclick="setTlDosha('good')">ධනාත්මක ශක්ති</button>
       </div>
     </div>
     <div class="tl-body">
@@ -513,6 +545,21 @@ const kujaMilestones = [
   { date: new Date(2028, 3, 1),  val: 1.5,  desc: "පූර්ණ පාලනය සහ ධන වර්ධනය" }
 ];
 
+/* ── NEW DATA FOR GOOD DEEDS ── */
+const goodDeedsMilestones = [
+  { date: new Date(2026, 5, 7),  val: 6.7, desc: "ශනි දශාවේ අවසන් සූදානම (Foundation building)" },
+  { date: new Date(2026, 8, 15), val: 7.0, desc: "කේතු සහ රාහු ගෝචර මාරුවීම් (Ajna Chakra activation)" },
+  { date: new Date(2027, 2, 15), val: 7.7, desc: "අධ්‍යාපනික සහ වෘත්තීය ඉලක්ක ස්ථාවර වීම" },
+  { date: new Date(2027, 4, 15), val: 8.0, desc: "ගුරු ග්‍රහයාගේ ධනාත්මක දෘෂ්ටිය ලග්නයට වැටීම" },
+  { date: new Date(2027, 8, 15), val: 8.5, desc: "පැරණි කර්ම ශක්තීන්ගෙන් නිදහස් වීම" },
+  { date: new Date(2027, 9, 16), val: 8.6, desc: "මහා දශා මාරුවට පෙර දින" },
+  { date: new Date(2027, 9, 17), val: 9.0, desc: "බුධ දශාව ආරම්භය (The Quantum Leap)" },
+  { date: new Date(2027, 10, 15), val: 9.1, desc: "ධර්මකර්මාධිපති යෝගය 100% ක් සක්‍රීය වීම" },
+  { date: new Date(2027, 11, 15), val: 9.2, desc: "විශුද්ධි චක්‍රය බලවත් වීම" },
+  { date: new Date(2028, 1, 15), val: 9.4, desc: "ව්‍යාපාරික ජයග්‍රහණ (Sovereign AstroMatrix)" },
+  { date: new Date(2028, 3, 1),  val: 9.6, desc: "උච්ච සිකුරුගේ ආධාරයෙන් ඉහළම තලයට ළඟා වීම" }
+];
+
 /* ── HELPERS ── */
 const monthsSi = ["ජනවාරි","පෙබරවාරි","මාර්තු","අප්‍රේල්","මැයි","ජූනි","ජූලි","අගෝස්තු","සැප්තැම්බර්","ඔක්තෝබර්","නොවැම්බර්","දෙසැම්බර්"];
 function formatDateSi(d) {
@@ -545,7 +592,8 @@ function generateDailyData(arr) {
 const allData = {
   saturn: generateDailyData(saturnMilestones),
   rahu:   generateDailyData(rahuKetuMilestones),
-  kuja:   generateDailyData(kujaMilestones)
+  kuja:   generateDailyData(kujaMilestones),
+  good:   generateDailyData(goodDeedsMilestones)
 };
 
 function getFiltered(arr, mode) {
@@ -570,7 +618,8 @@ function getFiltered(arr, mode) {
 const cfg = {
   saturn: { label:'ශනි ඒරාෂ්ටක',   color:'#38bdf8', bg:'rgba(56,189,248,0.15)'  },
   rahu:   { label:'රාහු-කේතු',      color:'#c084fc', bg:'rgba(192,132,252,0.15)' },
-  kuja:   { label:'කුජ',             color:'#fb923c', bg:'rgba(251,146,60,0.15)'  }
+  kuja:   { label:'කුජ',             color:'#fb923c', bg:'rgba(251,146,60,0.15)'  },
+  good:   { label:'ධනාත්මක ශක්ති',  color:'#10b981', bg:'rgba(16,185,129,0.15)'  }
 };
 
 /* ── STATE ── */
@@ -589,7 +638,7 @@ function renderChart() {
 
   if (curDosha === 'all') {
     ml.classList.add('visible'); sp.style.display = 'none';
-    ['saturn','rahu','kuja'].forEach((key, ki) => {
+    ['saturn','rahu','kuja','good'].forEach((key, ki) => {
       const fd = getFiltered(allData[key], curTime);
       if (ki === 0) baseLabels = fd.map(d => d.label);
       datasets.push({
@@ -709,11 +758,12 @@ function setTime(t) {
 }
 
 /* ── SEMANTIC TIMELINE (DANGER TO SAFE) ── */
-const tlMilestones = { saturn: saturnMilestones, rahu: rahuKetuMilestones, kuja: kujaMilestones };
+const tlMilestones = { saturn: saturnMilestones, rahu: rahuKetuMilestones, kuja: kujaMilestones, good: goodDeedsMilestones };
 const tlIconMap = {
   saturn: ['fa-solid fa-circle-dot','fa-solid fa-arrow-trend-up','fa-solid fa-triangle-exclamation','fa-solid fa-broom','fa-regular fa-clock','fa-solid fa-wand-magic-sparkles','fa-solid fa-rotate-left','fa-solid fa-dove','fa-solid fa-star'],
   rahu:   ['fa-solid fa-circle-dot','fa-solid fa-question','fa-solid fa-house-crack','fa-solid fa-bolt','fa-solid fa-explosion','fa-solid fa-book-open','fa-solid fa-cloud-sun','fa-solid fa-leaf'],
-  kuja:   ['fa-solid fa-circle-dot','fa-solid fa-equals','fa-solid fa-fire','fa-solid fa-wind','fa-solid fa-chart-line','fa-solid fa-dumbbell','fa-solid fa-coins']
+  kuja:   ['fa-solid fa-circle-dot','fa-solid fa-equals','fa-solid fa-fire','fa-solid fa-wind','fa-solid fa-chart-line','fa-solid fa-dumbbell','fa-solid fa-coins'],
+  good:   ['fa-solid fa-seedling', 'fa-solid fa-eye', 'fa-solid fa-bullseye', 'fa-solid fa-hands-praying', 'fa-solid fa-leaf', 'fa-solid fa-clock-rotate-left', 'fa-solid fa-rocket', 'fa-solid fa-sun', 'fa-solid fa-om', 'fa-solid fa-briefcase', 'fa-solid fa-crown']
 };
 
 function getSemanticStyle(v) {
@@ -733,6 +783,20 @@ function getSemanticStyle(v) {
   } else { 
     hex = '#38bdf8'; r = 56; g = 189; b = 248; // Peaceful (Sky Blue)
     glow = `0 4px 10px rgba(0,0,0,0.2)`;
+  }
+
+  // If viewing Good Deeds, reverse the semantic color logic (high is good)
+  if (currentTlDosha === 'good') {
+    if (v >= 8.5) { 
+      hex = '#10b981'; r = 16; g = 185; b = 129; // Excellent (Emerald)
+      glow = `0 0 16px rgba(16,185,129,0.25)`;
+    } else if (v >= 7.5) { 
+      hex = '#38bdf8'; r = 56; g = 189; b = 248; // Good (Sky Blue)
+      glow = `0 0 14px rgba(56,189,248,0.2)`;
+    } else {
+      hex = '#fbbf24'; r = 251; g = 191; b = 36; // Building (Amber)
+      glow = `0 0 10px rgba(251,191,36,0.15)`;
+    }
   }
 
   return {
