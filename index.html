@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>දීමන්තගේ බහු-දෝෂ විශ්ලේෂණය - Interactive</title>
+<title>දීමන්තගේ බහු-දෝෂ සහ ශක්ති විශ්ලේෂණය - Interactive</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
@@ -27,18 +27,35 @@
   --c-saturn:   #38bdf8;
   --c-rahu:     #c084fc;
   --c-kuja:     #fb923c;
-  --c-good:     #10b981; /* New: Emerald Green for Good Deeds */
   --c-all:      #f8fafc;
 
-  --sat-dim:    rgba(56,189,248,0.15);
-  --rahu-dim:   rgba(192,132,252,0.15);
-  --kuja-dim:   rgba(251,146,60,0.15);
-  --good-dim:   rgba(16,185,129,0.15); /* New */
+  /* NEW YOGA COLORS */
+  --c-malavya:  #ec4899;
+  --c-shatru:   #64748b;
+  --c-budha:    #14b8a6;
+  --c-gaja:     #eab308;
+  --c-sunapha:  #84cc16;
+  --c-kedara:   #6366f1;
+
+  --sat-dim:      rgba(56,189,248,0.15);
+  --rahu-dim:     rgba(192,132,252,0.15);
+  --kuja-dim:     rgba(251,146,60,0.15);
+  --malavya-dim:  rgba(236,72,153,0.15);
+  --shatru-dim:   rgba(100,116,139,0.15);
+  --budha-dim:    rgba(20,184,166,0.15);
+  --gaja-dim:     rgba(234,179,8,0.15);
+  --sunapha-dim:  rgba(132,204,22,0.15);
+  --kedara-dim:   rgba(99,102,241,0.15);
   
-  --sat-line:   rgba(56,189,248,0.4);
-  --rahu-line:  rgba(192,132,252,0.4);
-  --kuja-line:  rgba(251,146,60,0.4);
-  --good-line:  rgba(16,185,129,0.4); /* New */
+  --sat-line:     rgba(56,189,248,0.4);
+  --rahu-line:    rgba(192,132,252,0.4);
+  --kuja-line:    rgba(251,146,60,0.4);
+  --malavya-line: rgba(236,72,153,0.4);
+  --shatru-line:  rgba(100,116,139,0.4);
+  --budha-line:   rgba(20,184,166,0.4);
+  --gaja-line:    rgba(234,179,8,0.4);
+  --sunapha-line: rgba(132,204,22,0.4);
+  --kedara-line:  rgba(99,102,241,0.4);
 
   --r-sm: 10px;
   --r-md: 16px;
@@ -97,7 +114,7 @@ body {
 .eyebrow.e-saturn { color: var(--c-saturn); background: var(--sat-dim);  border-color: var(--sat-line); box-shadow: 0 4px 12px rgba(56,189,248,0.1); }
 .eyebrow.e-rahu   { color: var(--c-rahu);   background: var(--rahu-dim); border-color: var(--rahu-line); box-shadow: 0 4px 12px rgba(192,132,252,0.1); }
 .eyebrow.e-kuja   { color: var(--c-kuja);   background: var(--kuja-dim); border-color: var(--kuja-line); box-shadow: 0 4px 12px rgba(251,146,60,0.1); }
-.eyebrow.e-good   { color: var(--c-good);   background: var(--good-dim); border-color: var(--good-line); box-shadow: 0 4px 12px rgba(16,185,129,0.1); }
+.eyebrow.e-budha  { color: var(--c-budha);  background: var(--budha-dim); border-color: var(--budha-line); box-shadow: 0 4px 12px rgba(20,184,166,0.1); }
 
 .live-pip {
   width: 8px; height: 8px; border-radius: 50%;
@@ -173,9 +190,9 @@ body {
 .tile-kuja .m-badge { background: var(--kuja-dim); color: var(--c-kuja); border-color: var(--kuja-line); }
 .tile-kuja .m-bar-fill { background: var(--c-kuja); width: 20%; box-shadow: 0 0 8px var(--c-kuja); }
 
-.tile-good .m-icon  { background: var(--good-dim); color: var(--c-good); }
-.tile-good .m-badge { background: var(--good-dim); color: var(--c-good); border-color: var(--good-line); }
-.tile-good .m-bar-fill { background: var(--c-good); width: 96%; box-shadow: 0 0 8px var(--c-good); }
+.tile-budha .m-icon  { background: var(--budha-dim); color: var(--c-budha); }
+.tile-budha .m-badge { background: var(--budha-dim); color: var(--c-budha); border-color: var(--budha-line); }
+.tile-budha .m-bar-fill { background: var(--c-budha); width: 98%; box-shadow: 0 0 8px var(--c-budha); }
 
 /* ─── CHART CARD ─── */
 .chart-card { border-radius: var(--r-xl); overflow: hidden; animation: riseIn .6s var(--ease) .2s both; }
@@ -219,12 +236,19 @@ body {
 .pill:hover, .pill:focus-visible { border-color: var(--text-1); color: var(--text-1); outline: none; }
 .pill:active { transform: scale(.96); }
 
-.pill.active-all    { background: rgba(255,255,255,0.1); border-color: var(--c-all); color: var(--c-all); box-shadow: 0 0 12px rgba(255,255,255,0.1); }
-.pill.active-saturn { background: var(--sat-dim);  border-color: var(--sat-line);  color: var(--c-saturn); box-shadow: 0 0 12px rgba(56,189,248,0.2); }
-.pill.active-rahu   { background: var(--rahu-dim); border-color: var(--rahu-line); color: var(--c-rahu); box-shadow: 0 0 12px rgba(192,132,252,0.2); }
-.pill.active-kuja   { background: var(--kuja-dim); border-color: var(--kuja-line); color: var(--c-kuja); box-shadow: 0 0 12px rgba(251,146,60,0.2); }
-.pill.active-good   { background: var(--good-dim); border-color: var(--good-line); color: var(--c-good); box-shadow: 0 0 12px rgba(16,185,129,0.2); }
-.pill.active-time   { background: rgba(255,255,255,0.12); border-color: var(--text-1); color: var(--text-1); }
+.pill.active-all      { background: rgba(255,255,255,0.1); border-color: var(--c-all); color: var(--c-all); box-shadow: 0 0 12px rgba(255,255,255,0.1); }
+.pill.active-saturn   { background: var(--sat-dim);  border-color: var(--sat-line);  color: var(--c-saturn); box-shadow: 0 0 12px rgba(56,189,248,0.2); }
+.pill.active-rahu     { background: var(--rahu-dim); border-color: var(--rahu-line); color: var(--c-rahu); box-shadow: 0 0 12px rgba(192,132,252,0.2); }
+.pill.active-kuja     { background: var(--kuja-dim); border-color: var(--kuja-line); color: var(--c-kuja); box-shadow: 0 0 12px rgba(251,146,60,0.2); }
+/* NEW YOGA PILLS */
+.pill.active-malavya  { background: var(--malavya-dim); border-color: var(--malavya-line); color: var(--c-malavya); box-shadow: 0 0 12px rgba(236,72,153,0.2); }
+.pill.active-shatru   { background: var(--shatru-dim); border-color: var(--shatru-line); color: var(--c-shatru); box-shadow: 0 0 12px rgba(100,116,139,0.2); }
+.pill.active-budha    { background: var(--budha-dim); border-color: var(--budha-line); color: var(--c-budha); box-shadow: 0 0 12px rgba(20,184,166,0.2); }
+.pill.active-gaja     { background: var(--gaja-dim); border-color: var(--gaja-line); color: var(--c-gaja); box-shadow: 0 0 12px rgba(234,179,8,0.2); }
+.pill.active-sunapha  { background: var(--sunapha-dim); border-color: var(--sunapha-line); color: var(--c-sunapha); box-shadow: 0 0 12px rgba(132,204,22,0.2); }
+.pill.active-kedara   { background: var(--kedara-dim); border-color: var(--kedara-line); color: var(--c-kedara); box-shadow: 0 0 12px rgba(99,102,241,0.2); }
+
+.pill.active-time     { background: rgba(255,255,255,0.12); border-color: var(--text-1); color: var(--text-1); }
 
 /* ─── CHART BODY ─── */
 .chart-body { padding: 24px 24px 0; }
@@ -275,7 +299,12 @@ body {
 .tl-tab.tl-active-saturn { background: var(--sat-dim);  border-color: var(--sat-line);  color: var(--c-saturn); box-shadow: 0 0 12px rgba(56,189,248,0.1); }
 .tl-tab.tl-active-rahu   { background: var(--rahu-dim); border-color: var(--rahu-line); color: var(--c-rahu); box-shadow: 0 0 12px rgba(192,132,252,0.1); }
 .tl-tab.tl-active-kuja   { background: var(--kuja-dim); border-color: var(--kuja-line); color: var(--c-kuja); box-shadow: 0 0 12px rgba(251,146,60,0.1); }
-.tl-tab.tl-active-good   { background: var(--good-dim); border-color: var(--good-line); color: var(--c-good); box-shadow: 0 0 12px rgba(16,185,129,0.1); }
+.tl-tab.tl-active-malavya  { background: var(--malavya-dim); border-color: var(--malavya-line); color: var(--c-malavya); box-shadow: 0 0 12px rgba(236,72,153,0.1); }
+.tl-tab.tl-active-shatru   { background: var(--shatru-dim); border-color: var(--shatru-line); color: var(--c-shatru); box-shadow: 0 0 12px rgba(100,116,139,0.1); }
+.tl-tab.tl-active-budha    { background: var(--budha-dim); border-color: var(--budha-line); color: var(--c-budha); box-shadow: 0 0 12px rgba(20,184,166,0.1); }
+.tl-tab.tl-active-gaja     { background: var(--gaja-dim); border-color: var(--gaja-line); color: var(--c-gaja); box-shadow: 0 0 12px rgba(234,179,8,0.1); }
+.tl-tab.tl-active-sunapha  { background: var(--sunapha-dim); border-color: var(--sunapha-line); color: var(--c-sunapha); box-shadow: 0 0 12px rgba(132,204,22,0.1); }
+.tl-tab.tl-active-kedara   { background: var(--kedara-dim); border-color: var(--kedara-line); color: var(--c-kedara); box-shadow: 0 0 12px rgba(99,102,241,0.1); }
 
 .tl-body { padding: 0 24px 24px; }
 .tl-list { display: flex; flex-direction: column; }
@@ -292,7 +321,6 @@ body {
 .tl-icon {
   width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
   font-size: 14px; flex-shrink: 0; border: 1px solid; 
-  /* Box shadow applied dynamically in JS now */
 }
 .tl-line { flex:1; width:2px; min-height:16px; background: var(--border); border-radius: 2px; }
 
@@ -326,13 +354,11 @@ body {
   <header class="hdr">
     <div class="eyebrow-row">
       <div class="live-pip"></div>
-      <span class="eyebrow e-saturn"><i class="fa-solid fa-ring"></i>ශනි</span>
-      <span class="eyebrow e-rahu"><i class="fa-solid fa-eclipse"></i>රාහු-කේතු</span>
-      <span class="eyebrow e-kuja"><i class="fa-solid fa-fire-flame-curved"></i>කුජ</span>
-      <span class="eyebrow e-good"><i class="fa-solid fa-seedling"></i>ධනාත්මක ශක්ති</span>
+      <span class="eyebrow e-saturn"><i class="fa-solid fa-ring"></i>දෝෂ</span>
+      <span class="eyebrow e-budha"><i class="fa-solid fa-seedling"></i>ශුභ යෝග</span>
     </div>
     <h1 class="hdr-title">දීමන්තගේ බහු-දෝෂ<br>සහ ශක්ති විශ්ලේෂණය</h1>
-    <p class="hdr-sub">ශනි ඒරාෂ්ටකය, රාහු-කේතු සහ කුජ දෝෂයන් සමග කර්මජ ශක්ති පිබිදීමේ කාලරේඛාව (2026–2028)</p>
+    <p class="hdr-sub">ශනි ඒරාෂ්ටකය, රාහු-කේතු සහ කුජ දෝෂයන් සමග ප්‍රධාන ශුභ යෝග 6හි ක්‍රියාකාරීත්ව කාලරේඛාව (2026–2028)</p>
   </header>
 
   <!-- ── METRIC TILES ── -->
@@ -364,14 +390,13 @@ body {
       <div class="m-label">කුජ – ජනවාරි 2027 ක්ෂණික ස්පයික්</div>
       <div class="m-bar"><div class="m-bar-fill"></div></div>
     </div>
-    <!-- NEW TILE: Good Deeds / Positive Karma -->
-    <div class="m-tile glass-panel tile-good">
+    <div class="m-tile glass-panel tile-budha">
       <div class="m-tile-top">
-        <div class="m-icon"><i class="fa-solid fa-seedling"></i></div>
-        <span class="m-badge"><i class="fa-solid fa-arrow-trend-up fa-xs"></i> 2027 ඔක්</span>
+        <div class="m-icon"><i class="fa-solid fa-microchip"></i></div>
+        <span class="m-badge"><i class="fa-solid fa-arrow-trend-up fa-xs"></i> අප්‍රේල් 2028</span>
       </div>
-      <div class="m-val">9.6/10</div>
-      <div class="m-label">ධර්මකර්මාධිපති යෝගය</div>
+      <div class="m-val">9.8/10</div>
+      <div class="m-label">බුධාදිත්‍ය යෝගය (Coding/AI Spike)</div>
       <div class="m-bar"><div class="m-bar-fill"></div></div>
     </div>
   </div>
@@ -382,7 +407,7 @@ body {
       <div class="chart-title-row">
         <div class="chart-title-icon"><i class="fa-solid fa-chart-line"></i></div>
         <div>
-          <div class="chart-title">දෝෂ සහ ශක්ති පීඩන ප්‍රස්තාරය</div>
+          <div class="chart-title">දෝෂ සහ යෝග පීඩන ප්‍රස්තාරය</div>
           <div class="chart-subtitle">ජූනි 2026 – අප්‍රේල් 2028 · 0–10 척도</div>
         </div>
       </div>
@@ -391,22 +416,37 @@ body {
     <!-- Controls -->
     <div class="controls-wrap">
       <div class="ctrl-row">
-        <div class="ctrl-lbl"><i class="fa-solid fa-layer-group"></i>ප්‍රස්ථාර දත්ත</div>
+        <div class="ctrl-lbl"><i class="fa-solid fa-layer-group"></i>දත්ත වර්ගය</div>
         <div class="pills" id="dosha-pills">
           <button class="pill active-all" data-type="all" onclick="setDosha('all')">
             <i class="fa-solid fa-chart-pie"></i>සියලු
           </button>
           <button class="pill" data-type="saturn" onclick="setDosha('saturn')">
-            <i class="fa-solid fa-ring"></i>ශනි
+            <i class="fa-solid fa-ring"></i>ශනි දෝෂ
           </button>
           <button class="pill" data-type="rahu" onclick="setDosha('rahu')">
-            <i class="fa-solid fa-eclipse"></i>රාහු-කේතු
+            <i class="fa-solid fa-eclipse"></i>රාහු දෝෂ
           </button>
           <button class="pill" data-type="kuja" onclick="setDosha('kuja')">
-            <i class="fa-solid fa-fire-flame-curved"></i>කුජ
+            <i class="fa-solid fa-fire-flame-curved"></i>කුජ දෝෂ
           </button>
-          <button class="pill" data-type="good" onclick="setDosha('good')">
-            <i class="fa-solid fa-seedling"></i>ධනාත්මක ශක්ති
+          <button class="pill" data-type="malavya" onclick="setDosha('malavya')">
+            <i class="fa-solid fa-gem"></i>මාලව්‍ය
+          </button>
+          <button class="pill" data-type="shatru" onclick="setDosha('shatru')">
+            <i class="fa-solid fa-shield-halved"></i>ශතෘ හන්ත
+          </button>
+          <button class="pill" data-type="budha" onclick="setDosha('budha')">
+            <i class="fa-solid fa-microchip"></i>බුධාදිත්‍ය
+          </button>
+          <button class="pill" data-type="gaja" onclick="setDosha('gaja')">
+            <i class="fa-solid fa-eye"></i>ගජකේසරි
+          </button>
+          <button class="pill" data-type="sunapha" onclick="setDosha('sunapha')">
+            <i class="fa-solid fa-sack-dollar"></i>සුනඵා
+          </button>
+          <button class="pill" data-type="kedara" onclick="setDosha('kedara')">
+            <i class="fa-solid fa-bullseye"></i>කේදාර
           </button>
         </div>
       </div>
@@ -443,17 +483,42 @@ body {
       <div class="ml-item">
         <div class="ml-dot" style="color:var(--c-rahu); background:var(--c-rahu);"></div>
         <div class="ml-dash" style="background:var(--c-rahu);"></div>
-        රාහු-කේතු අර්බුදය
+        රාහු-කේතු
       </div>
       <div class="ml-item">
         <div class="ml-dot" style="color:var(--c-kuja); background:var(--c-kuja);"></div>
         <div class="ml-dash" style="background:var(--c-kuja);"></div>
-        කුජ බලපෑම
+        කුජ දෝෂ
       </div>
       <div class="ml-item">
-        <div class="ml-dot" style="color:var(--c-good); background:var(--c-good);"></div>
-        <div class="ml-dash" style="background:var(--c-good);"></div>
-        ධනාත්මක ශක්ති
+        <div class="ml-dot" style="color:var(--c-malavya); background:var(--c-malavya);"></div>
+        <div class="ml-dash" style="background:var(--c-malavya);"></div>
+        මාලව්‍ය යෝගය
+      </div>
+      <div class="ml-item">
+        <div class="ml-dot" style="color:var(--c-shatru); background:var(--c-shatru);"></div>
+        <div class="ml-dash" style="background:var(--c-shatru);"></div>
+        ශතෘ හන්ත යෝගය
+      </div>
+      <div class="ml-item">
+        <div class="ml-dot" style="color:var(--c-budha); background:var(--c-budha);"></div>
+        <div class="ml-dash" style="background:var(--c-budha);"></div>
+        බුධාදිත්‍ය යෝගය
+      </div>
+      <div class="ml-item">
+        <div class="ml-dot" style="color:var(--c-gaja); background:var(--c-gaja);"></div>
+        <div class="ml-dash" style="background:var(--c-gaja);"></div>
+        ගජකේසරි යෝගය
+      </div>
+      <div class="ml-item">
+        <div class="ml-dot" style="color:var(--c-sunapha); background:var(--c-sunapha);"></div>
+        <div class="ml-dash" style="background:var(--c-sunapha);"></div>
+        සුනඵා යෝගය
+      </div>
+      <div class="ml-item">
+        <div class="ml-dot" style="color:var(--c-kedara); background:var(--c-kedara);"></div>
+        <div class="ml-dash" style="background:var(--c-kedara);"></div>
+        කේදාර යෝගය
       </div>
     </div>
     <div class="single-pad" id="singlePad" style="display:none;"></div>
@@ -475,9 +540,9 @@ body {
         <span>රාහු අර්බුදය</span>
         <span class="p-yr">නොවැ 2027</span>
       </div>
-      <div class="p-seg" style="background:rgba(74,222,128,0.06);color:#4ade80;">
-        <div class="p-pip" style="color:#4ade80; background:#4ade80;"></div>
-        <span>සම්පූර්ණ සුවය</span>
+      <div class="p-seg" style="background:rgba(20,184,166,0.06);color:var(--c-budha);">
+        <div class="p-pip" style="color:var(--c-budha); background:var(--c-budha);"></div>
+        <span>බුධාදිත්‍ය නැගීම</span>
         <span class="p-yr">2028</span>
       </div>
     </div>
@@ -494,7 +559,12 @@ body {
         <button class="tl-tab tl-active-saturn" data-tl="saturn" onclick="setTlDosha('saturn')">ශනි ඒරාෂ්ටක</button>
         <button class="tl-tab" data-tl="rahu"   onclick="setTlDosha('rahu')">රාහු-කේතු</button>
         <button class="tl-tab" data-tl="kuja"   onclick="setTlDosha('kuja')">කුජ දෝෂ</button>
-        <button class="tl-tab" data-tl="good"   onclick="setTlDosha('good')">ධනාත්මක ශක්ති</button>
+        <button class="tl-tab" data-tl="malavya"  onclick="setTlDosha('malavya')">මාලව්‍ය</button>
+        <button class="tl-tab" data-tl="shatru"   onclick="setTlDosha('shatru')">ශතෘ හන්ත</button>
+        <button class="tl-tab" data-tl="budha"    onclick="setTlDosha('budha')">බුධාදිත්‍ය</button>
+        <button class="tl-tab" data-tl="gaja"     onclick="setTlDosha('gaja')">ගජකේසරි</button>
+        <button class="tl-tab" data-tl="sunapha"  onclick="setTlDosha('sunapha')">සුනඵා</button>
+        <button class="tl-tab" data-tl="kedara"   onclick="setTlDosha('kedara')">කේදාර</button>
       </div>
     </div>
     <div class="tl-body">
@@ -512,7 +582,7 @@ body {
 
 <script>
 /* ═══════════════════════════════════════════════════════
-   ORIGINAL DATA — STRICTLY UNTOUCHED
+   ORIGINAL DOSHA DATA — STRICTLY UNTOUCHED
 ═══════════════════════════════════════════════════════ */
 const saturnMilestones = [
   { date: new Date(2026, 5, 7),  val: 8.0,  desc: "ඒරාෂ්ටක සහ 6 වැන්නේ පීඩනය" },
@@ -545,20 +615,44 @@ const kujaMilestones = [
   { date: new Date(2028, 3, 1),  val: 1.5,  desc: "පූර්ණ පාලනය සහ ධන වර්ධනය" }
 ];
 
-/* ── NEW DATA FOR GOOD DEEDS ── */
-const goodDeedsMilestones = [
-  { date: new Date(2026, 5, 7),  val: 6.7, desc: "ශනි දශාවේ අවසන් සූදානම (Foundation building)" },
-  { date: new Date(2026, 8, 15), val: 7.0, desc: "කේතු සහ රාහු ගෝචර මාරුවීම් (Ajna Chakra activation)" },
-  { date: new Date(2027, 2, 15), val: 7.7, desc: "අධ්‍යාපනික සහ වෘත්තීය ඉලක්ක ස්ථාවර වීම" },
-  { date: new Date(2027, 4, 15), val: 8.0, desc: "ගුරු ග්‍රහයාගේ ධනාත්මක දෘෂ්ටිය ලග්නයට වැටීම" },
-  { date: new Date(2027, 8, 15), val: 8.5, desc: "පැරණි කර්ම ශක්තීන්ගෙන් නිදහස් වීම" },
-  { date: new Date(2027, 9, 16), val: 8.6, desc: "මහා දශා මාරුවට පෙර දින" },
-  { date: new Date(2027, 9, 17), val: 9.0, desc: "බුධ දශාව ආරම්භය (The Quantum Leap)" },
-  { date: new Date(2027, 10, 15), val: 9.1, desc: "ධර්මකර්මාධිපති යෝගය 100% ක් සක්‍රීය වීම" },
-  { date: new Date(2027, 11, 15), val: 9.2, desc: "විශුද්ධි චක්‍රය බලවත් වීම" },
-  { date: new Date(2028, 1, 15), val: 9.4, desc: "ව්‍යාපාරික ජයග්‍රහණ (Sovereign AstroMatrix)" },
-  { date: new Date(2028, 3, 1),  val: 9.6, desc: "උච්ච සිකුරුගේ ආධාරයෙන් ඉහළම තලයට ළඟා වීම" }
+/* ── NEW DATA FOR 6 YOGAS (Generated directly from provided monthly data matrix) ── */
+const rawYogaPoints = [
+  // [year, monthIndex, malavya, shatru, budha, gaja, sunapha, kedara, general_desc]
+  [2026, 5,  7.4, 8.9, 6.4, 7.4, 7.3, 8.0, "ශනි දශාවේ අවසන් සූදානම. බාධක ජයගැනීමේ අදියර."],
+  [2026, 6,  7.5, 8.8, 6.5, 7.5, 7.4, 8.0, ""],
+  [2026, 7,  7.6, 8.7, 6.6, 7.5, 7.5, 8.0, ""],
+  [2026, 8,  7.6, 8.7, 6.8, 7.6, 7.5, 8.0, "කේතු සහ රාහුගේ ගෝචර මාරුවීම් සමග මානසික පැහැදිලි බව"],
+  [2026, 9,  7.7, 8.6, 7.0, 7.6, 7.6, 8.1, ""],
+  [2026, 10, 7.7, 8.5, 7.1, 7.7, 7.6, 8.1, ""],
+  [2026, 11, 7.8, 8.5, 7.2, 7.7, 7.7, 8.1, ""],
+  [2027, 0,  7.8, 8.4, 7.4, 7.8, 7.7, 8.1, "අධ්‍යාපනික සහ වෘත්තීය ඉලක්ක ස්ථාවර වීම"],
+  [2027, 1,  7.9, 8.4, 7.6, 7.8, 7.8, 8.2, ""],
+  [2027, 2,  8.0, 8.3, 7.8, 7.9, 7.9, 8.2, "ගුරු ග්‍රහයාගේ ධනාත්මක දෘෂ්ටියෙන් අරමුණු තියුණු වීම"],
+  [2027, 3,  8.0, 8.2, 8.0, 7.9, 7.9, 8.2, ""],
+  [2027, 4,  8.1, 8.2, 8.2, 8.0, 8.0, 8.3, ""],
+  [2027, 5,  8.2, 8.1, 8.4, 8.0, 8.1, 8.3, "පැරණි කර්ම ශක්තීන් (Karmic debts) නිදහස් වීම"],
+  [2027, 6,  8.2, 8.0, 8.6, 8.1, 8.1, 8.3, ""],
+  [2027, 7,  8.3, 8.0, 8.8, 8.2, 8.2, 8.4, ""],
+  [2027, 8,  8.5, 7.8, 9.0, 8.2, 8.3, 8.4, ""],
+  [2027, 9,  8.8, 7.5, 9.5, 8.3, 8.5, 8.4, "The Big Shift: බුධ දශාව ආරම්භ වීම (Massive Career Spike)"],
+  [2027, 10, 9.0, 7.5, 9.5, 8.4, 8.7, 8.5, ""],
+  [2027, 11, 9.1, 7.4, 9.6, 8.4, 8.8, 8.5, "විශුද්ධි චක්‍රය බලවත් වීම (Sovereign AstroMatrix)"],
+  [2028, 0,  9.2, 7.4, 9.6, 8.5, 8.8, 8.5, ""],
+  [2028, 1,  9.3, 7.3, 9.7, 8.5, 8.9, 8.5, ""],
+  [2028, 2,  9.4, 7.3, 9.7, 8.6, 9.0, 8.5, "උච්ච සිකුරුගේ ආධාරයෙන් ඉහළම තලයට ළඟා වීම"],
+  [2028, 3,  9.6, 7.2, 9.8, 8.6, 9.0, 8.5, "මූල්‍යමය සහ සෞන්දර්යාත්මක ඉහළම තලය"]
 ];
+
+let malavyaMs = [], shatruMs = [], budhaMs = [], gajaMs = [], sunaphaMs = [], kedaraMs = [];
+rawYogaPoints.forEach(p => {
+  let dt = new Date(p[0], p[1], 1); 
+  malavyaMs.push({ date: dt, val: p[2], desc: p[8] || "මාලව්‍ය යෝගයේ බලපෑම (Luxury/UI)" });
+  shatruMs.push({  date: dt, val: p[3], desc: p[8] || "ශතෘ හන්ත යෝගයේ බලපෑම (Discipline)" });
+  budhaMs.push({   date: dt, val: p[4], desc: p[8] || "බුධාදිත්‍ය යෝගයේ බලපෑම (Coding/AI)" });
+  gajaMs.push({    date: dt, val: p[5], desc: p[8] || "ගජකේසරි යෝගයේ බලපෑම (Intuition)" });
+  sunaphaMs.push({ date: dt, val: p[6], desc: p[8] || "සුනඵා යෝගයේ බලපෑම (Wealth)" });
+  kedaraMs.push({  date: dt, val: p[7], desc: p[8] || "කේදාර යෝගයේ බලපෑම (Focus Base)" });
+});
 
 /* ── HELPERS ── */
 const monthsSi = ["ජනවාරි","පෙබරවාරි","මාර්තු","අප්‍රේල්","මැයි","ජූනි","ජූලි","අගෝස්තු","සැප්තැම්බර්","ඔක්තෝබර්","නොවැම්බර්","දෙසැම්බර්"];
@@ -590,10 +684,15 @@ function generateDailyData(arr) {
 }
 
 const allData = {
-  saturn: generateDailyData(saturnMilestones),
-  rahu:   generateDailyData(rahuKetuMilestones),
-  kuja:   generateDailyData(kujaMilestones),
-  good:   generateDailyData(goodDeedsMilestones)
+  saturn:  generateDailyData(saturnMilestones),
+  rahu:    generateDailyData(rahuKetuMilestones),
+  kuja:    generateDailyData(kujaMilestones),
+  malavya: generateDailyData(malavyaMs),
+  shatru:  generateDailyData(shatruMs),
+  budha:   generateDailyData(budhaMs),
+  gaja:    generateDailyData(gajaMs),
+  sunapha: generateDailyData(sunaphaMs),
+  kedara:  generateDailyData(kedaraMs)
 };
 
 function getFiltered(arr, mode) {
@@ -616,10 +715,15 @@ function getFiltered(arr, mode) {
 
 /* ── CONFIG ── */
 const cfg = {
-  saturn: { label:'ශනි ඒරාෂ්ටක',   color:'#38bdf8', bg:'rgba(56,189,248,0.15)'  },
-  rahu:   { label:'රාහු-කේතු',      color:'#c084fc', bg:'rgba(192,132,252,0.15)' },
-  kuja:   { label:'කුජ',             color:'#fb923c', bg:'rgba(251,146,60,0.15)'  },
-  good:   { label:'ධනාත්මක ශක්ති',  color:'#10b981', bg:'rgba(16,185,129,0.15)'  }
+  saturn:  { label:'ශනි ඒරාෂ්ටක',   color:'#38bdf8', bg:'rgba(56,189,248,0.15)'  },
+  rahu:    { label:'රාහු-කේතු',      color:'#c084fc', bg:'rgba(192,132,252,0.15)' },
+  kuja:    { label:'කුජ',             color:'#fb923c', bg:'rgba(251,146,60,0.15)'  },
+  malavya: { label:'මාලව්‍ය යෝගය',   color:'#ec4899', bg:'rgba(236,72,153,0.15)'  },
+  shatru:  { label:'ශතෘ හන්ත යෝගය', color:'#64748b', bg:'rgba(100,116,139,0.15)' },
+  budha:   { label:'බුධාදිත්‍ය යෝගය',  color:'#14b8a6', bg:'rgba(20,184,166,0.15)'  },
+  gaja:    { label:'ගජකේසරි යෝගය',  color:'#eab308', bg:'rgba(234,179,8,0.15)'   },
+  sunapha: { label:'සුනඵා යෝගය',    color:'#84cc16', bg:'rgba(132,204,22,0.15)'  },
+  kedara:  { label:'කේදාර යෝගය',   color:'#6366f1', bg:'rgba(99,102,241,0.15)'  }
 };
 
 /* ── STATE ── */
@@ -638,7 +742,7 @@ function renderChart() {
 
   if (curDosha === 'all') {
     ml.classList.add('visible'); sp.style.display = 'none';
-    ['saturn','rahu','kuja','good'].forEach((key, ki) => {
+    ['saturn','rahu','kuja','malavya','shatru','budha','gaja','sunapha','kedara'].forEach((key, ki) => {
       const fd = getFiltered(allData[key], curTime);
       if (ki === 0) baseLabels = fd.map(d => d.label);
       datasets.push({
@@ -757,36 +861,37 @@ function setTime(t) {
   renderChart();
 }
 
-/* ── SEMANTIC TIMELINE (DANGER TO SAFE) ── */
-const tlMilestones = { saturn: saturnMilestones, rahu: rahuKetuMilestones, kuja: kujaMilestones, good: goodDeedsMilestones };
+/* ── SEMANTIC TIMELINE (DANGER TO SAFE / EXCELLENT TO BUILDING) ── */
+const tlMilestones = { 
+  saturn: saturnMilestones, 
+  rahu: rahuKetuMilestones, 
+  kuja: kujaMilestones, 
+  malavya: malavyaMs, 
+  shatru: shatruMs, 
+  budha: budhaMs, 
+  gaja: gajaMs, 
+  sunapha: sunaphaMs, 
+  kedara: kedaraMs 
+};
 const tlIconMap = {
-  saturn: ['fa-solid fa-circle-dot','fa-solid fa-arrow-trend-up','fa-solid fa-triangle-exclamation','fa-solid fa-broom','fa-regular fa-clock','fa-solid fa-wand-magic-sparkles','fa-solid fa-rotate-left','fa-solid fa-dove','fa-solid fa-star'],
-  rahu:   ['fa-solid fa-circle-dot','fa-solid fa-question','fa-solid fa-house-crack','fa-solid fa-bolt','fa-solid fa-explosion','fa-solid fa-book-open','fa-solid fa-cloud-sun','fa-solid fa-leaf'],
-  kuja:   ['fa-solid fa-circle-dot','fa-solid fa-equals','fa-solid fa-fire','fa-solid fa-wind','fa-solid fa-chart-line','fa-solid fa-dumbbell','fa-solid fa-coins'],
-  good:   ['fa-solid fa-seedling', 'fa-solid fa-eye', 'fa-solid fa-bullseye', 'fa-solid fa-hands-praying', 'fa-solid fa-leaf', 'fa-solid fa-clock-rotate-left', 'fa-solid fa-rocket', 'fa-solid fa-sun', 'fa-solid fa-om', 'fa-solid fa-briefcase', 'fa-solid fa-crown']
+  saturn:  ['fa-solid fa-circle-dot','fa-solid fa-arrow-trend-up','fa-solid fa-triangle-exclamation','fa-solid fa-broom','fa-regular fa-clock','fa-solid fa-wand-magic-sparkles','fa-solid fa-rotate-left','fa-solid fa-dove','fa-solid fa-star'],
+  rahu:    ['fa-solid fa-circle-dot','fa-solid fa-question','fa-solid fa-house-crack','fa-solid fa-bolt','fa-solid fa-explosion','fa-solid fa-book-open','fa-solid fa-cloud-sun','fa-solid fa-leaf'],
+  kuja:    ['fa-solid fa-circle-dot','fa-solid fa-equals','fa-solid fa-fire','fa-solid fa-wind','fa-solid fa-chart-line','fa-solid fa-dumbbell','fa-solid fa-coins'],
+  malavya: ['fa-solid fa-gem','fa-solid fa-gem','fa-solid fa-gem','fa-solid fa-gem','fa-solid fa-gem','fa-solid fa-gem','fa-solid fa-gem','fa-solid fa-gem','fa-solid fa-gem','fa-solid fa-gem','fa-solid fa-gem'],
+  shatru:  ['fa-solid fa-shield-halved','fa-solid fa-shield-halved','fa-solid fa-shield-halved','fa-solid fa-shield-halved','fa-solid fa-shield-halved','fa-solid fa-shield-halved','fa-solid fa-shield-halved','fa-solid fa-shield-halved','fa-solid fa-shield-halved','fa-solid fa-shield-halved','fa-solid fa-shield-halved'],
+  budha:   ['fa-solid fa-microchip','fa-solid fa-microchip','fa-solid fa-microchip','fa-solid fa-microchip','fa-solid fa-microchip','fa-solid fa-microchip','fa-solid fa-microchip','fa-solid fa-microchip','fa-solid fa-microchip','fa-solid fa-microchip','fa-solid fa-microchip'],
+  gaja:    ['fa-solid fa-eye','fa-solid fa-eye','fa-solid fa-eye','fa-solid fa-eye','fa-solid fa-eye','fa-solid fa-eye','fa-solid fa-eye','fa-solid fa-eye','fa-solid fa-eye','fa-solid fa-eye','fa-solid fa-eye'],
+  sunapha: ['fa-solid fa-sack-dollar','fa-solid fa-sack-dollar','fa-solid fa-sack-dollar','fa-solid fa-sack-dollar','fa-solid fa-sack-dollar','fa-solid fa-sack-dollar','fa-solid fa-sack-dollar','fa-solid fa-sack-dollar','fa-solid fa-sack-dollar','fa-solid fa-sack-dollar','fa-solid fa-sack-dollar'],
+  kedara:  ['fa-solid fa-bullseye','fa-solid fa-bullseye','fa-solid fa-bullseye','fa-solid fa-bullseye','fa-solid fa-bullseye','fa-solid fa-bullseye','fa-solid fa-bullseye','fa-solid fa-bullseye','fa-solid fa-bullseye','fa-solid fa-bullseye','fa-solid fa-bullseye']
 };
 
 function getSemanticStyle(v) {
   let hex, r, g, b, glow;
-  if (v >= 8.5) { 
-    hex = '#ef4444'; r = 239; g = 68; b = 68;  // Danger (Red)
-    glow = `0 0 16px rgba(239,68,68,0.25)`;
-  } else if (v >= 6.5) { 
-    hex = '#f97316'; r = 249; g = 115; b = 22; // High (Orange)
-    glow = `0 0 14px rgba(249,115,22,0.2)`;
-  } else if (v >= 4.0) { 
-    hex = '#fbbf24'; r = 251; g = 191; b = 36; // Moderate (Amber)
-    glow = `0 0 10px rgba(251,191,36,0.15)`;
-  } else if (v >= 2.0) { 
-    hex = '#34d399'; r = 52; g = 211; b = 153; // Safe (Emerald)
-    glow = `0 4px 10px rgba(0,0,0,0.2)`;
-  } else { 
-    hex = '#38bdf8'; r = 56; g = 189; b = 248; // Peaceful (Sky Blue)
-    glow = `0 4px 10px rgba(0,0,0,0.2)`;
-  }
-
-  // If viewing Good Deeds, reverse the semantic color logic (high is good)
-  if (currentTlDosha === 'good') {
+  
+  const yogaKeys = ['malavya', 'shatru', 'budha', 'gaja', 'sunapha', 'kedara'];
+  
+  if (yogaKeys.includes(currentTlDosha)) {
+    // Logic for Auspicious Yogas (High is Excellent/Green)
     if (v >= 8.5) { 
       hex = '#10b981'; r = 16; g = 185; b = 129; // Excellent (Emerald)
       glow = `0 0 16px rgba(16,185,129,0.25)`;
@@ -796,6 +901,24 @@ function getSemanticStyle(v) {
     } else {
       hex = '#fbbf24'; r = 251; g = 191; b = 36; // Building (Amber)
       glow = `0 0 10px rgba(251,191,36,0.15)`;
+    }
+  } else {
+    // Logic for Doshas (High is Danger/Red)
+    if (v >= 8.5) { 
+      hex = '#ef4444'; r = 239; g = 68; b = 68;  // Danger (Red)
+      glow = `0 0 16px rgba(239,68,68,0.25)`;
+    } else if (v >= 6.5) { 
+      hex = '#f97316'; r = 249; g = 115; b = 22; // High (Orange)
+      glow = `0 0 14px rgba(249,115,22,0.2)`;
+    } else if (v >= 4.0) { 
+      hex = '#fbbf24'; r = 251; g = 191; b = 36; // Moderate (Amber)
+      glow = `0 0 10px rgba(251,191,36,0.15)`;
+    } else if (v >= 2.0) { 
+      hex = '#34d399'; r = 52; g = 211; b = 153; // Safe (Emerald)
+      glow = `0 4px 10px rgba(0,0,0,0.2)`;
+    } else { 
+      hex = '#38bdf8'; r = 56; g = 189; b = 248; // Peaceful (Sky Blue)
+      glow = `0 4px 10px rgba(0,0,0,0.2)`;
     }
   }
 
@@ -810,6 +933,7 @@ function getSemanticStyle(v) {
 function buildTimeline(doshaKey) {
   const list = document.getElementById('tlList');
   list.innerHTML = '';
+  // Default to raw points generated array if not standard dosha
   const milestones = tlMilestones[doshaKey];
   const icons = tlIconMap[doshaKey];
 
